@@ -1,0 +1,165 @@
+/* Global Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #0b0d17; /* Dark space background */
+  color: #f0f0f0;
+  scroll-behavior: smooth;
+}
+
+.nasa-logo {
+  width: 80px;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
+
+/* Navigation Bar */
+header {
+  background-color: rgba(0, 0, 0, 0.8); /* Transparent background */
+  padding: 10px 0;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.navbar ul li {
+  display: inline;
+  margin: 0 15px;
+}
+
+.navbar ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.navbar ul li a:hover {
+  color: #00d8ff;
+}
+
+/* Main Map Section */
+#map-section {
+  position: relative;
+  padding: 40px;
+  text-align: center;
+}
+
+.map-container {
+  position: relative;
+  height: 80vh;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.map-search {
+  margin-bottom: 20px;
+}
+
+#place-search {
+  padding: 10px;
+  width: 300px;
+  border-radius: 8px;
+  border: 1px solid #00d8ff;
+  background-color: #1d1f27;
+  color: #ffffff;
+}
+
+.map-search button {
+  padding: 10px 15px;
+  margin-left: 10px;
+  background-color: #00d8ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#world-map {
+  width: 100%;
+  height: 100%;
+  background-color: #121212;
+  border-radius: 12px;
+  border: 2px solid #00d8ff;
+  animation: mapAnimation 1s ease-in-out;
+}
+
+/* Right-Side Vertical Bar */
+.side-bar {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.side-bar .icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.side-bar .icon img {
+  width: 100%;
+  height: 100%;
+  filter: invert(100%); /* White icons for dark background */
+}
+
+/* Voice Feedback Button */
+.voice-feedback {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background-color: #00d8ff;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.voice-feedback button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.1rem;
+}
+
+#voice-text {
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+/* Animation */
+@keyframes mapAnimation {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Footer */
+footer {
+  background-color: #0b0d17;
+  color: #aaaaaa;
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+footer p {
+  margin: 0;
+}

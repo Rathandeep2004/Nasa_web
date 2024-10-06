@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greenhouse Gas Map - Astro Avengers 2</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+    }
+    #map {
+      height: 85vh;
+      width: 100%;
+    }
+    .navbar {
+      background-color: #222;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar h1 {
+      margin: 0;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+    .navbar img {
+      height: 30px; /* Adjust height as needed */
+      margin-right: 10px; /* Spacing between logo and text */
+    }
+    .navbar ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+    .navbar ul li {
+      margin-left: 20px;
+    }
+    .navbar ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 15px;
+      transition: background-color 0.3s;
+    }
+    .navbar ul li a:hover {
+      background-color: #444;
+      border-radius: 5px;
+    }
+    .search-bar {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      padding: 10px 20px;
+    }
+    .search-bar input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    .search-bar button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .search-bar button:hover {
+      background-color: #45a049;
+    }
+    .vertical-bar {
+      position: fixed;
+      right: 20px;
+      top: 80px;
+      background-color: #333;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .vertical-bar button {
+      background-color: #444;
+      border: none;
+      color: white;
+      padding: 10px;
+      margin: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .vertical-bar button:hover {
+      background-color: #555;
+    }
+    #chartContainer {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      width: 400px;
+      height: 250px;
+      display: none;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 10px;
+      z-index: 999; /* Ensure the chart is above other content */
+    }
+    canvas {
+      width: 100% !important; /* Ensures the canvas fits within the container */
+      height: 100% !important; /* Ensures the canvas fits within the container */
+    }
+  </style>
+  <!-- Load Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <h1><img src="nasa logo.png" alt="NASA Logo"  height="150"> Astro Avengers 2</h1>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="gre.html">Greenhouse Gases</a></li>
+      <li><a href="def.html">Challenge</a></li>
+      <li><a href="about.html">About Us</a></li>
+    </ul>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input id="searchInput" type="text" placeholder="Search for a place..." />
+    <button id="searchButton">Search</button>
+  </div>
+
+  <!-- Map Container -->
+  <div id="map"></div>
+
+  <!-- Right Side Vertical Bar with Compass and Icons -->
+
+
+  <!-- Chart Container for Greenhouse Gas Graph in Bottom-Left Corner -->
+  <div id="chartContainer">
+    <canvas id="gasChart"></canvas>
+  </div>
+
+  <!-- Load Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <!-- Load Chart.js for the greenhouse gas graph -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // Initialize the map using Leaflet
+    const map = L.map('map').setView([20, 0], 2); // World view
+
+    // Load and display OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Create a marker and an info window
+    let marker, infoPopup, gasChart;
+
+    // Function to search for a location using Nominatim
+    function searchLocation(query) {
+      fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length > 0) {
+            const location = data[0];
+            const lat = location.lat;
+            const lon = location.lon;
+
+            // Center the map on the searched location
+            map.setView([lat, lon], 8);
+
+            // Remove the existing marker, if any
+            if (marker) map.removeLayer(marker);
+
+            // Add a marker for the searched location
+            marker = L.marker([lat, lon]).addTo(map);
+
+            // Placeholder greenhouse gas data (in percentages)
+            const co2Concentration = Math.random() * (420 - 390) + 390;  // Random CO2 (between 390-420 ppm)
+            const methaneConcentration = Math.random() * (2 - 1.6) + 1.6;  // Random CH4 (between 1.6-2 ppm)
+            const nitrousConcentration = Math.random() * (0.4 - 0.3) + 0.3;  // Random N2O (between 0.3-0.4 ppm)
+
+            // Show a popup with greenhouse gas data
+            const popupContent = `<strong>${location.display_name}</strong><br>
+              CO2: ${co2Concentration.toFixed(2)} ppm<br>
+              Methane (CH4): ${methaneConcentration.toFixed(2)} ppm<br>
+              Nitrous Oxide (N2O): ${nitrousConcentration.toFixed(2)} ppm`;
+            if (infoPopup) infoPopup.remove();
+            infoPopup = L.popup()
+              .setLatLng([lat, lon])
+              .setContent(popupContent)
+              .openOn(map);
+
+            // Show the greenhouse gas graph in the bottom-left corner
+            showGasGraph(co2Concentration, methaneConcentration, nitrousConcentration);
+
+            // AI Voice Assistant: Read the gas concentrations aloud for every search
+            const message = `At ${location.display_name}, CO2 concentration is ${co2Concentration.toFixed(2)} parts per million, Methane concentration is ${methaneConcentration.toFixed(2)} parts per million, and Nitrous oxide concentration is ${nitrousConcentration.toFixed(2)} parts per million.`;
+            const utterance = new SpeechSynthesisUtterance(message);
+            speechSynthesis.speak(utterance);
+          } else {
+            alert("Location not found");
+          }
+        });
+    }
+
+    // Search button click event
+    document.getElementById('searchButton').addEventListener('click', function () {
+      const query = document.getElementById('searchInput').value;
+      if (query) searchLocation(query);
+    });
+
+    // Enable Enter key functionality for search
+    document.getElementById('searchInput').addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        const query = document.getElementById('searchInput').value;
+        if (query) searchLocation(query);
+      }
+    });
+
+    // Show the greenhouse gas graph
+    function showGasGraph(co2, ch4, n2o) {
+      const ctx = document.getElementById('gasChart').getContext('2d');
+      const chartContainer = document.getElementById('chartContainer');
+      chartContainer.style.display = 'block'; // Show the chart container
+
+      // Destroy previous chart if it exists
+      if (gasChart) {
+        gasChart.destroy();
+      }
+
+      gasChart = new Chart(ctx, {
+        type: 'line', // Change to 'line' for line graph
+        data: {
+          labels: ['CO2', 'CH4', 'N2O'],
+          datasets: [{
+            label: 'Concentration (ppm)',
+            data: [co2, ch4, n2o],
+            fill: false,
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(75, 192, 192, 1)',
+            ],
+            tension: 0.1,  // Smoother lines
+            borderWidth: 2
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Concentration (ppm)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Greenhouse Gases'
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

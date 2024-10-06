@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astro Avengers 2 - Resources</title>
+  <link rel="stylesheet" href="res.css">
+</head>
+<body>
+  <header>
+    <h1>Astro Avengers 2 Resources</h1>
+    <p class="subtitle">Explore more about Space, NASA, and Greenhouse Gases</p>
+  </header>
+
+  <div class="content">
+    <h2>Upload Your Resource</h2>
+    <form id="uploadForm">
+      <label for="fileUpload">Select a file to upload:</label><br/>
+      <input type="file" id="fileUpload" name="fileUpload" accept=".pdf, .docx, .jpg, .png, .txt"><br/><br/>
+      <input type="submit" value="Upload Resource">
+    </form>
+
+    <div class="uploaded-resources">
+      <h3>Uploaded Resources</h3>
+      <ul id="resourceList">
+        <!-- Uploaded files will be listed here -->
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p>Powered by Astro Avengers 2</p>
+  </footer>
+
+  <script src="res.js"></script>
+</body>
+</html>

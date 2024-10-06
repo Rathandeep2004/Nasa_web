@@ -1,0 +1,126 @@
+/* Global Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #0b0d17; /* Dark space background */
+    color: #f0f0f0;
+    scroll-behavior: smooth;
+  }
+  
+  /* NASA Logo at the top */
+  .nasa-logo {
+    width: 170px;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+  }
+  
+  /* Navigation Bar */
+  header {
+    background-color: rgba(0, 0, 0, 0.8); /* Transparent background */
+    padding: 10px 0;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .navbar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .navbar ul li {
+    display: inline;
+    margin: 0 15px;
+  }
+  
+  .navbar ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  
+  .navbar ul li a:hover {
+    color: #00d8ff;
+  }
+  
+  /* Definition List Section */
+  #definitions {
+    padding: 80px 20px;
+    text-align: center;
+    background-color: #1d1f27;
+  }
+  
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    font-size: 2.5rem;
+    color: #00d8ff;
+    margin-bottom: 20px;
+  }
+  
+  dl {
+    text-align: left;
+    margin: 0 auto;
+    max-width: 800px;
+  }
+  
+  dt {
+    font-size: 1.8rem;
+    color: #00d8ff;
+    margin-top: 30px;
+  }
+  
+  dd {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin-left: 20px;
+  }
+  
+  /* Definition Items with Image Tags */
+  .definition-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+  
+  .definition-image {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 15px;
+    border-radius: 8px;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #0b0d17;
+    color: #aaaaaa;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  footer p {
+    margin: 0;
+  }
+  
+  /* Animation */
+  .fade-in-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  
+  .fade-in-section.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
